@@ -12,10 +12,11 @@ from toolbox_02450 import rlr_validate
 from READ_DATA import regression_data, regression_target, regression_names
 X = regression_data.to_numpy()
 y = regression_target.to_numpy()
+attributeNames = regression_names.to_numpy().tolist()
 N, M = X.shape
+
 X = np.concatenate((np.ones((N,1)),X),1)
 M=M+1
-attributeNames = regression_names.to_numpy().tolist()
 attributeNames = [u'offset']+attributeNames
 
 # %%

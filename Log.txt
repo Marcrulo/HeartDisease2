@@ -1,4 +1,4 @@
 5. Nov
 - Jeg forstÃ¥r ikke hvorfor jeg ikke kan fitte en linear regression model ordentligt?
   Et det bare umuligt at forudsige ting som 'alder' og 'cholesterol' ud fra de andre parametrer?
-- Er "validation error" det samme som "generalization error"?
+- I ex8_2_6.py er learning curve lavet på test-data eller trænings-data?
