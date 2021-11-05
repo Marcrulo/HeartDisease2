@@ -8,7 +8,7 @@ from toolbox_02450 import train_neural_net, draw_neural_net
 from scipy import stats
 
 # Load Matlab data file and extract variables of interest
-mat_data = loadmat('../Data/wine2.mat')
+mat_data = loadmat('Data/wine2.mat')
 attributeNames = [name[0] for name in mat_data['attributeNames'][0]]
 X = mat_data['X']
 y = X[:,[10]]             # alcohol contents (target)

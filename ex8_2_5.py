@@ -21,20 +21,17 @@ C = 2
 X = stats.zscore(X);
 
 # Parameters for neural network classifier
-n_hidden_units = 1     # number of hidden units
+n_hidden_units = 1      # number of hidden units
 n_replicates = 2        # number of networks trained in each k-fold
-max_iter = 10000         # stop criterion 2 (max epochs in training)
+max_iter = 10000        # stop criterion 2 (max epochs in training)
 
 # K-fold crossvalidation
 K = 3                   # only five folds to speed up this example
 CV = model_selection.KFold(K, shuffle=True)
-# Make figure for holding summaries (errors and learning curves)
 summaries, summaries_axes = plt.subplots(1,2, figsize=(10,5))
-# Make a list for storing assigned color of learning curve for up to K=10
 color_list = ['tab:orange', 'tab:green', 'tab:purple', 'tab:brown', 'tab:pink',
               'tab:gray', 'tab:olive', 'tab:cyan', 'tab:red', 'tab:blue']
 
-# Define the model, see also Exercise 8.2.2-script for more information.
 model = lambda: torch.nn.Sequential(
                     torch.nn.Linear(M, n_hidden_units), #M features to H hiden units
                     torch.nn.Tanh(),   # 1st transfer function,

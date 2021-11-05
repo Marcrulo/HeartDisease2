@@ -50,7 +50,7 @@ for train_index, test_index in CV.split(X,y):
     y_test = y[test_index]
     internal_cross_validation = 10    
     
-    # INNER CROSS VALIDATION
+    # INNER CROSS VALIDATION (VALIDATION ERRORS)
     opt_val_err, opt_lambda, mean_w_vs_lambda, train_err_vs_lambda, test_err_vs_lambda = \
      rlr_validate(X_train, y_train, lambdas, internal_cross_validation)
     
@@ -76,7 +76,7 @@ for train_index, test_index in CV.split(X,y):
     
     
     
-    # COMPUTE SQUARED ERROR
+    # COMPUTE SQUARED ERROR (TEST ERRORS)
     # without using the input data at all
     Error_train_nofeatures[k] = np.square(y_train-y_train.mean()).sum(axis=0)/y_train.shape[0]
     Error_test_nofeatures[k] = np.square(y_test-y_test.mean()).sum(axis=0)/y_test.shape[0]  
@@ -98,6 +98,7 @@ for train_index, test_index in CV.split(X,y):
 
     # Display the results for the last cross-validation fold
     if k == K-1:
+        break
         figure(k, figsize=(12,8))
         subplot(1,2,1)
         semilogx(lambdas,mean_w_vs_lambda.T[:,1:],'.-') # Don't plot the bias term
