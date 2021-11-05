@@ -9,18 +9,20 @@ from sklearn import model_selection
 from toolbox_02450 import rlr_validate
 
 # %%
-from MAIN_1 import X,y, names
+from READ_DATA import regression_data, regression_target, regression_names
+X = regression_data.to_numpy()
+y = regression_target.to_numpy()
 N, M = X.shape
 X = np.concatenate((np.ones((N,1)),X),1)
 M=M+1
-attributeNames = names.to_numpy()
-attributeNames = [u'offset']+attributeNames.tolist()
+attributeNames = regression_names.to_numpy().tolist()
+attributeNames = [u'offset']+attributeNames
 
 # %%
 
 ## Crossvalidation
 # Create crossvalidation partition for evaluation
-K = 10
+K = 5
 CV = model_selection.KFold(K, shuffle=True)
 #CV = model_selection.KFold(K, shuffle=False)
 
@@ -49,7 +51,8 @@ for train_index, test_index in CV.split(X,y):
     y_test = y[test_index]
     internal_cross_validation = 10    
     
-    opt_val_err, opt_lambda, mean_w_vs_lambda, train_err_vs_lambda, test_err_vs_lambda = rlr_validate(X_train, y_train, lambdas, internal_cross_validation)
+    opt_val_err, opt_lambda, mean_w_vs_lambda, train_err_vs_lambda, test_err_vs_lambda =\
+     rlr_validate(X_train, y_train, lambdas, internal_cross_validation)
 
     # Standardize outer fold based on training set, and save the mean and standard
     # deviations since they're part of the model (they would be needed for
@@ -130,4 +133,3 @@ for m in range(M):
     print('{:>15} {:>15}'.format(attributeNames[m], np.round(w_rlr[m,-1],2)))
 
 print('Ran Exercise 8.1.1')
-

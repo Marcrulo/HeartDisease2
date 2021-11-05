@@ -8,7 +8,7 @@ import torch
 plt.rcParams.update({'font.size': 12})
 
 # read XOR DATA from matlab datafile
-mat_data = loadmat('../Data/xor.mat')
+mat_data = loadmat('Data/xor.mat')
 X = mat_data['X']
 y = mat_data['y']
 

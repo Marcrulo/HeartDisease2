@@ -1,4 +1,4 @@
 5. Nov
-- I've had a hard time fitting a linear regression model to the data. 
-This must mean, that the data in not (very) linearly dependant, right?
-- Also, is "validation error" the same as "generalization error"?
+- Jeg forstår ikke hvorfor jeg ikke kan fitte en linear regression model ordentligt?
+  Et det bare umuligt at forudsige ting som 'alder' og 'cholesterol' ud fra de andre parametrer?
+- Er "validation error" det samme som "generalization error"?
