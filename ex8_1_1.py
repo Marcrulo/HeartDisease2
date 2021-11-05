@@ -43,7 +43,6 @@ w_noreg = np.empty((M,K))
 
 k=0
 for train_index, test_index in CV.split(X,y):
-    
     # extract training and test set for current CV fold
     X_train = X[train_index]
     y_train = y[train_index]

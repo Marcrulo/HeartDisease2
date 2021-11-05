@@ -4,16 +4,18 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 
 # %% Prepare data
-X = regression_data
-y = regression_target
+names = regression_data.columns
+X = regression_data.to_numpy()
+y = regression_target.to_numpy()
+N, M = X.shape
 
-# Split train/test data
-test_size = .5
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size)
 
 # Feature transformation
-mu = np.mean(X_train, 0)
-sigma = np.std(X_train, 0)
 
-X_train = (X_train - mu) / sigma
-X_test = (X_test - mu) / sigma
+#mu = np.mean(X_train, 0)
+#sigma = np.std(X_train, 0)
+#X_train = (X_train - mu) / sigma
+#X_test = (X_test - mu) / sigma
+
+# lambda
+#lambdas = np.power(10.,range(-5,9))

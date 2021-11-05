@@ -7,5 +7,7 @@ df = k_coding(df) # apply out-of-k coding
 classification_data   = df.loc[:,'age':'cp_3']
 classification_target = df.loc[:,'target']
 
-regression_data = df.loc[:,'age':'trestbps'].join(df.loc[:,'fbs':'target'])
-regression_target = df.loc[:,'chol']
+#regression_data = df.loc[:,'age':'trestbps'].join(df.loc[:,'fbs':'target'])
+regression_data = df.loc[:,'sex':'target']
+#regression_data = df[['thalach','ca','trestbps']]
+regression_target = df.loc[:,'age']
