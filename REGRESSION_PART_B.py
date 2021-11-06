@@ -16,12 +16,12 @@ y = regression_target.to_numpy()
 attributeNames = regression_names.to_numpy().tolist()
 N, M = X.shape
 
-
-Xt = apply_pca(X)
+X = apply_pca(X)
 
 X = np.concatenate((np.ones((N,1)),X),1)
 M=M+1
 attributeNames = [u'offset']+attributeNames
+
 
 
 
@@ -54,9 +54,9 @@ lambdas = np.power(10.,range(-1,7))
 
 # %% ANN
 # Parameters for neural network classifier
-n_hidden_units = 2      # number of hidden units
-n_replicates = 1        # number of networks trained in each k-fold
-max_iter = 1000
+n_hidden_units = 4      # number of hidden units
+n_replicates = 3        # number of networks trained in each k-fold
+max_iter = 30000
 
 model = lambda: torch.nn.Sequential(
                     torch.nn.Linear(M, n_hidden_units), 
@@ -114,9 +114,9 @@ for train_index, test_index in CV.split(X,y):
     
     ###########################################################################
     # ANN DATA
-    X_train = torch.Tensor(Xt[train_index,:])
+    X_train = torch.Tensor(X[train_index,:])
     y_train = torch.Tensor(y[train_index]).float().unsqueeze(1)
-    X_test = torch.Tensor(Xt[test_index,:])
+    X_test = torch.Tensor(X[test_index,:])
     y_test = torch.Tensor(y[test_index]).float().unsqueeze(1)
     
     net, final_loss, learning_curve = train_neural_net(model,
