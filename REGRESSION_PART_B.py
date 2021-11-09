@@ -67,7 +67,7 @@ def inner_fold(X_train,y_train,k):
         # Parameters for neural network classifier
         n_hidden_units = h      # number of hidden units
         n_replicates = 3        # number of networks trained in each k-fold
-        max_iter = 10000
+        max_iter = 100
         
         model = lambda: torch.nn.Sequential(
                             torch.nn.Linear(M, n_hidden_units), 
@@ -165,10 +165,13 @@ show()
 p12 = pingouin.ttest(z1.squeeze(),Error_test_rlr.squeeze(),paired=True)                     # ANN vs Lin
 p23 = pingouin.ttest(Error_test_rlr.squeeze(),Error_test_nofeatures.squeeze(),paired=True)  # Lin vs base
 p31 = pingouin.ttest(z1.squeeze(),Error_test_nofeatures.squeeze(),paired=True)              # ANN vs base
+
+print("p-values:")
 print(p12['p-val']['T-test'])
 print(p23['p-val']['T-test'])
 print(p31['p-val']['T-test'])       
 
+print('\nconfidence intervals:')
 print(p12['CI95%']['T-test'])
 print(p23['CI95%']['T-test'])
 print(p31['CI95%']['T-test'])
