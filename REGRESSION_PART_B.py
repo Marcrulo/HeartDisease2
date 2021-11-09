@@ -27,7 +27,7 @@ attributeNames = [u'offset']+attributeNames
 
 # %% Prepare data
 
-K = 10 
+K = 5 
 CV = model_selection.KFold(K, shuffle=True)
 
 
@@ -52,18 +52,44 @@ lambdas = np.power(10.,range(-1,7))
 
 
 
-# %% ANN
-# Parameters for neural network classifier
-n_hidden_units = 4      # number of hidden units
-n_replicates = 3        # number of networks trained in each k-fold
-max_iter = 30000
+# %%
+loss_at_k = {}
 
-model = lambda: torch.nn.Sequential(
-                    torch.nn.Linear(M, n_hidden_units), 
-                    torch.nn.Tanh(),   
-                    torch.nn.Linear(n_hidden_units, 1)
-                    )
-loss_fn = torch.nn.MSELoss()
+
+def inner_fold(X_train,y_train,k):
+    
+    
+    max_h = 10
+    min_loss = float('inf')
+    opt_h = None
+    
+    for h in range(1,max_h):
+        # Parameters for neural network classifier
+        n_hidden_units = h      # number of hidden units
+        n_replicates = 3        # number of networks trained in each k-fold
+        max_iter = 100
+        
+        model = lambda: torch.nn.Sequential(
+                            torch.nn.Linear(M, n_hidden_units), 
+                            torch.nn.Tanh(),   
+                            torch.nn.Linear(n_hidden_units, 1)
+                            )
+        loss_fn = torch.nn.MSELoss()
+        
+        print(f'h={h}, k={k}')
+        net, final_loss, learning_curve = train_neural_net(model,
+                                                           loss_fn,
+                                                           X=X_train,
+                                                           y=y_train,
+                                                           n_replicates=n_replicates,
+                                                           max_iter=max_iter)
+        
+        if final_loss < min_loss:
+            min_loss = final_loss
+            opt_h = h
+            
+    
+    return min_loss, opt_h
 
 # %%
 
@@ -119,12 +145,10 @@ for train_index, test_index in CV.split(X,y):
     X_test = torch.Tensor(X[test_index,:])
     y_test = torch.Tensor(y[test_index]).float().unsqueeze(1)
     
-    net, final_loss, learning_curve = train_neural_net(model,
-                                                       loss_fn,
-                                                       X=X_train,
-                                                       y=y_train,
-                                                       n_replicates=n_replicates,
-                                                       max_iter=max_iter)
+    
+    opt_err, opt_h = inner_fold(X_train,y_train,k)
+    loss_at_k[(k,opt_h)] = opt_err
+    
     
     # TABLE CONTENT
     print("Outer fold k={}, lambda*={},rlr_error={},base_error={}".format(\

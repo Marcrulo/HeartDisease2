@@ -5,11 +5,9 @@ df = read_csv('heart.csv')
 df = k_coding(df) # apply out-of-k coding
 
 
-
 # Classification Data
 classification_data   = df.loc[:,'age':'cp_3']
 classification_target = df.loc[:,'target']
-
 
 
 # Regression Data
