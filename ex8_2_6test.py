@@ -18,9 +18,9 @@ X = apply_pca(X)
 
 
 # Parameters for neural network classifier
-n_hidden_units = 4      # number of hidden units
+n_hidden_units = 2      # number of hidden units
 n_replicates = 1        # number of networks trained in each k-fold
-max_iter = 1000
+max_iter = 10000
 
 # K-fold crossvalidation
 K = 5                  

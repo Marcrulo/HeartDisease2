@@ -7,7 +7,7 @@ from sklearn import model_selection
 from toolbox_02450 import rlr_validate, train_neural_net
 import torch
 from compute_pca import apply_pca
-
+import pingouin
 
 # %%
 from READ_DATA import regression_data, regression_target, regression_names
@@ -54,7 +54,7 @@ lambdas = np.power(10.,range(-1,7))
 
 # %%
 loss_at_k = {}
-
+z1 = np.empty((K,1))
 
 def inner_fold(X_train,y_train,k):
     
@@ -67,7 +67,7 @@ def inner_fold(X_train,y_train,k):
         # Parameters for neural network classifier
         n_hidden_units = h      # number of hidden units
         n_replicates = 3        # number of networks trained in each k-fold
-        max_iter = 100
+        max_iter = 10000
         
         model = lambda: torch.nn.Sequential(
                             torch.nn.Linear(M, n_hidden_units), 
@@ -92,6 +92,7 @@ def inner_fold(X_train,y_train,k):
     return min_loss, opt_h
 
 # %%
+
 
 
 # OUTER CROSS VALIDATION
@@ -148,6 +149,7 @@ for train_index, test_index in CV.split(X,y):
     
     opt_err, opt_h = inner_fold(X_train,y_train,k)
     loss_at_k[(k,opt_h)] = opt_err
+    z1[k]=opt_err
     
     
     # TABLE CONTENT
@@ -159,5 +161,15 @@ for train_index, test_index in CV.split(X,y):
     k+=1
 
 show()
+# %%
+p12 = pingouin.ttest(z1.squeeze(),Error_test_rlr.squeeze(),paired=True)                     # ANN vs Lin
+p23 = pingouin.ttest(Error_test_rlr.squeeze(),Error_test_nofeatures.squeeze(),paired=True)  # Lin vs base
+p31 = pingouin.ttest(z1.squeeze(),Error_test_nofeatures.squeeze(),paired=True)              # ANN vs base
+print(p12['p-val']['T-test'])
+print(p23['p-val']['T-test'])
+print(p31['p-val']['T-test'])       
 
-        
+print(p12['CI95%']['T-test'])
+print(p23['CI95%']['T-test'])
+print(p31['CI95%']['T-test'])
+ 
