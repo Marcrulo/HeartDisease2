@@ -27,7 +27,7 @@ C = 2#len(classNames)
 # Create crossvalidation partition for evaluation
 # using stratification and 95 pct. split between training and test 
 K = 20
-X = zscore(X,ddof=1)
+#X = zscore(X,ddof=1)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.95, stratify=y)
 
 
@@ -35,12 +35,12 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.95, stratif
 mu = np.mean(X_train, 0)
 sigma = np.std(X_train, 0)
 
-#X_train = (X_train - mu) / sigma
-#X_test = (X_test - mu) / sigma
+X_train = (X_train - mu) / (sigma + 0.00001)
+X_test = (X_test - mu) / (sigma + 0.00001)
 
 # Fit regularized logistic regression model to training data to predict 
 # the type of wine
-lambda_interval = np.logspace(-8, 10, 50)
+lambda_interval = np.logspace(-8, 8, 50)
 train_error_rate = np.zeros(len(lambda_interval))
 test_error_rate = np.zeros(len(lambda_interval))
 coefficient_norm = np.zeros(len(lambda_interval))
