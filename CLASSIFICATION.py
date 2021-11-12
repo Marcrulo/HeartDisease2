@@ -38,7 +38,7 @@ data=df.loc[:,'age':'thal']
 
 N, M = df.shape
 
-X = df.to_numpy()
+X = (df.iloc[:,:13]).to_numpy()
 y=(df.iloc[:,-1]).to_numpy()
 y.shape = (y.shape[0], 1)
 
