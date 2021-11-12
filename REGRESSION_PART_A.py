@@ -8,6 +8,8 @@ import sklearn.linear_model as lm
 from sklearn import model_selection
 from toolbox_02450 import rlr_validate
 
+from compute_pca import apply_pca
+
 from READ_DATA import regression_data, regression_target, regression_names
 X = regression_data.to_numpy()
 y = regression_target.to_numpy()
@@ -24,13 +26,14 @@ X = np.concatenate((np.ones((N,1)),X),1)
 M=M+1
 attributeNames = [u'offset']+attributeNames
 
+#X = apply_pca(X)
 
 ## Crossvalidation
 K = 10 # outer fold
 CV = model_selection.KFold(K, shuffle=True)
 
 # Values of lambda
-lambdas = np.power(10.,range(-3,9))
+lambdas = np.power(10.,range(-1,7))
 
 
 

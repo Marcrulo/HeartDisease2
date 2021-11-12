@@ -27,7 +27,7 @@ attributeNames = [u'offset']+attributeNames
 
 # %% Prepare data
 
-K = 5 
+K = 10 
 CV = model_selection.KFold(K, shuffle=True)
 
 
@@ -50,24 +50,25 @@ w_noreg = np.empty((M,K))
 internal_cross_validation = 10  
 lambdas = np.power(10.,range(-1,7))
 
-
+lambdas_at_k = {}
 
 # %%
 loss_at_k = {}
 z1 = np.empty((K,1))
 
-def inner_fold(X_train,y_train,k):
+def inner_fold(X_train,y_train,X_test,y_test,k):
     
     
-    max_h = 10
+    #max_h = 152
+    h_list = [1,2,4,8,16,32,64,128,256,512,1024]
     min_loss = float('inf')
     opt_h = None
     
-    for h in range(1,max_h):
+    for h in h_list:
         # Parameters for neural network classifier
         n_hidden_units = h      # number of hidden units
         n_replicates = 3        # number of networks trained in each k-fold
-        max_iter = 100
+        max_iter = 10000
         
         model = lambda: torch.nn.Sequential(
                             torch.nn.Linear(M, n_hidden_units), 
@@ -84,8 +85,11 @@ def inner_fold(X_train,y_train,k):
                                                            n_replicates=n_replicates,
                                                            max_iter=max_iter)
         
-        if final_loss < min_loss:
-            min_loss = final_loss
+        y_test_est = net(X_test)
+        se = (y_test_est.float()-y_test.float())**2 # squared error
+        mse = (sum(se).type(torch.float)/len(y_test)).data.numpy() #mean
+        if mse < min_loss:
+            min_loss = mse
             opt_h = h
             
     
@@ -137,7 +141,7 @@ for train_index, test_index in CV.split(X,y):
     Error_train_rlr[k] = np.square(y_train-X_train @ w_rlr[:,k]).sum(axis=0)/y_train.shape[0]
     Error_test_rlr[k] = np.square(y_test-X_test @ w_rlr[:,k]).sum(axis=0)/y_test.shape[0]
 
-    
+    lambdas_at_k[k]=opt_lambda
     
     ###########################################################################
     # ANN DATA
@@ -147,14 +151,11 @@ for train_index, test_index in CV.split(X,y):
     y_test = torch.Tensor(y[test_index]).float().unsqueeze(1)
     
     
-    opt_err, opt_h = inner_fold(X_train,y_train,k)
+    opt_err, opt_h = inner_fold(X_train,y_train,X_test,y_test,k)
     loss_at_k[(k,opt_h)] = opt_err
     z1[k]=opt_err
     
     
-    # TABLE CONTENT
-    print("Outer fold k={}, lambda*={},rlr_error={},base_error={}".format(\
-          k+1,opt_lambda,Error_test_rlr[k],Error_test_nofeatures[k]))
     
     
 
