@@ -33,16 +33,16 @@ import sklearn.linear_model as lm
 df=pd.read_csv('heart.csv')
 
 # Split
-data=df.loc[:,'age':'thal']
+#data=df.loc[:,'age':'thal']
 
 
 N, M = df.shape
 
-X = df.to_numpy()
+X =(df.iloc[:,:13]).to_numpy()
 y=(df.iloc[:,-1]).to_numpy()
 
 
-attributeNames = list(data.columns)
+#attributeNames = list(data.columns)
 
 
 # %% Inspired by 8.1.2
@@ -107,7 +107,7 @@ plt.xlabel('Regularization strength, $\log_{10}(\lambda)$')
 plt.ylabel('Error rate (%)')
 plt.title('Classification error')
 plt.legend(['Training error','Test error','Test minimum'],loc='upper right')
-plt.ylim([0, 4])
+#plt.ylim([0, 4])
 plt.grid()
 plt.show()    
 

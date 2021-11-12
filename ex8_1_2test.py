@@ -8,7 +8,7 @@ from sklearn.linear_model import LogisticRegression
 from toolbox_02450 import rocplot, confmatplot
 from READ_DATA import classification_data, classification_target
 from scipy.stats import zscore
-
+    
 font_size = 15
 plt.rcParams.update({'font.size': font_size})
 
@@ -18,8 +18,8 @@ plt.rcParams.update({'font.size': font_size})
 #y = mat_data['y'].squeeze()
 #attributeNames = [name[0] for name in mat_data['attributeNames'][0]]
 #classNames = [name[0][0] for name in mat_data['classNames']]
-X = classification_data#.to_numpy()
-y = classification_target#.to_numpy()
+X = classification_data.to_numpy()
+y = classification_target.to_numpy()
 N, M = X.shape
 C = 2#len(classNames)
 
@@ -38,9 +38,12 @@ sigma = np.std(X_train, 0)
 X_train = (X_train - mu) / (sigma + 0.00001)
 X_test = (X_test - mu) / (sigma + 0.00001)
 
+
+# %%
+
 # Fit regularized logistic regression model to training data to predict 
 # the type of wine
-lambda_interval = np.logspace(-8, 8, 50)
+lambda_interval = np.logspace(-8, 2, 50)
 train_error_rate = np.zeros(len(lambda_interval))
 test_error_rate = np.zeros(len(lambda_interval))
 coefficient_norm = np.zeros(len(lambda_interval))
