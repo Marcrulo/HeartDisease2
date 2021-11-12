@@ -40,7 +40,6 @@ N, M = df.shape
 
 X = df.to_numpy()
 y=(df.iloc[:,-1]).to_numpy()
-y.shape = (y.shape[0], 1)
 
 
 attributeNames = list(data.columns)
