@@ -17,6 +17,7 @@ import sklearn.linear_model as lm
 
 from compute_pca import apply_pca
 from READ_DATA import classification_data, classification_target
+from inner_fold import inner_fold
 
 # %% Import data
 X = classification_data.to_numpy()
@@ -35,13 +36,10 @@ X = apply_pca(X)
 #X = zscore(X,ddof=1)
 
 
-
-
 # %% 
 lambda_interval = np.logspace(-8, 2, 50)
 
-logistic_test_error_rate = np.zeros(len(lambda_interval))
-logistic_optimal_lambda = []
+logistic_error = {} # k: (error, lambda)
 
 ann_test_error_rate= [] 
 ann_optimal_h=[]
@@ -54,23 +52,27 @@ for k, (train_index, test_index) in enumerate(CV.split(X,y)):
     y_test = y[test_index]    
     
     # Logistic regression
-    for k in range(0, len(lambda_interval)):
-        mdl = LogisticRegression(penalty='l2', C=1/lambda_interval[k] )
+    test_error_rate = np.zeros(len(lambda_interval))
+    
+    for lambda_i in range(0, len(lambda_interval)):
+        mdl = LogisticRegression(penalty='l2', C=1/lambda_interval[lambda_i] )
         
         mdl.fit(X_train, y_train)
 
         y_test_est = mdl.predict(X_test).T        
         
-        logistic_test_error_rate[k] = np.sum(y_test_est != y_test) / len(y_test)
+        test_error_rate[lambda_i] = np.sum(y_test_est != y_test) / len(y_test)
 
-    min_error = np.min(logistic_test_error_rate)
-    opt_lambda_idx = np.argmin(logistic_test_error_rate)
-    opt_lambda = lambda_interval[opt_lambda_idx]
+    min_error = np.min(test_error_rate)
+    opt_lambda_idx = np.argmin(test_error_rate)
     
+    logistic_error[k] = (min_error, lambda_interval[opt_lambda_idx])
+
     
     # ANN
+        
+
     
 
-print(f"Minimum error {min_error}\nOptimal lambda: {opt_lambda}")
-
+print(logistic_error)
 
