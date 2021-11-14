@@ -69,7 +69,7 @@ X_test = (X_test - mu) / sigma
 
 # Fit regularized logistic regression model to training data to predict 
 # the type of wine
-lambda_interval = np.logspace(-8, 2, 50)
+lambda_interval = np.logspace(1,1,1)
 train_error_rate = np.zeros(len(lambda_interval))
 test_error_rate = np.zeros(len(lambda_interval))
 coefficient_norm = np.zeros(len(lambda_interval))

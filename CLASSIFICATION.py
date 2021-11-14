@@ -16,13 +16,13 @@ N, M = X.shape
 
 # %% Cross validation
 K = 10
-CV = model_selection.RepeatedKFold(n_splits=K,n_repeats=3)
-#CV = model_selection.KFold(K,shuffle=True)
+#CV = model_selection.RepeatedKFold(n_splits=K,n_repeats=3)
+CV = model_selection.KFold(K,shuffle=True)
 
 
 # %% Feature transformation
 
-# PCA or normal standardization???
+# PCA 
 X = apply_pca(X)
 #X = zscore(X,ddof=1)
 
@@ -91,9 +91,9 @@ for k, (train_index, test_index) in enumerate(CV.split(X,y)):
     
     for lambda_i in range(0, len(lambda_interval)):
         mdl = LogisticRegression(penalty='l2', C=1/lambda_interval[lambda_i] )
-        
-        mdl.fit(X_train, y_train)
 
+        mdl.fit(X_train, y_train)
+        
         y_test_est = mdl.predict(X_test).T        
         
         test_error_rate[lambda_i] = np.sum(y_test_est != y_test) / len(y_test)
