@@ -68,7 +68,7 @@ def inner_fold(X_train,y_train,X_test,y_test,k):
         # Parameters for neural network classifier
         n_hidden_units = h      # number of hidden units
         n_replicates = 3        # number of networks trained in each k-fold
-        max_iter = 10000
+        max_iter = 1000
         
         model = lambda: torch.nn.Sequential(
                             torch.nn.Linear(M, n_hidden_units), 
